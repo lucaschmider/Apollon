@@ -1,0 +1,2 @@
+class CallbackNotInitializedException(Exception):
+    pass
