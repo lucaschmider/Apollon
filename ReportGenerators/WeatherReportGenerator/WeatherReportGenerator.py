@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Dict
 
 from ReportGenerators.ReportGeneratorBase import ReportGeneratorBase
@@ -14,15 +14,23 @@ class WeatherReportGenerator(ReportGeneratorBase):
         weather = response.json()
         city_name = weather["city"]["name"]
         today = weather["list"][0]
-        sunset = datetime.utcfromtimestamp(today["sunset"])
+
+        average_temp = self.__kelvin_to_celsius__(today["temp"]["day"])
+        min_temp = self.__kelvin_to_celsius__(today["temp"]["min"])
+        max_temp = self.__kelvin_to_celsius__(today["temp"]["max"])
+        sunset = datetime.utcfromtimestamp(today["sunset"]) + timedelta(seconds=int(weather["city"]["timezone"]))
 
         return "In " + city_name + " sind es heute "\
-               + str(today["temp"]["day"]) + " Kelvin. Die Minimaltemperatur wird heute "+ str(today["temp"]["min"]) + \
-               " Kelvin und die Maximaltemperatur " + str(today["temp"]["max"])  + " Kelvin betragen." + \
-               self.__generate_weather_report__(today) +  " Die Sonne wird heute um " + str(sunset.hour) + "." + str(sunset.minute)+ " Uhr untergehen."
+               + str(average_temp) + "°C. Die Minimaltemperatur wird heute "+ str(min_temp) + \
+               "°C und die Maximaltemperatur " + str(max_temp)  + "°C betragen." + \
+               self.__generate_weather_report__(today) +  " Die Sonne geht heute um " + str(sunset.hour) + "." + str(sunset.minute)+ " Uhr Ortszeit unter."
 
     @staticmethod
     def __generate_weather_report__(report: Dict) -> str:
         if "rain" in report.keys():
             return "Der Niederschlag beträgt etwa " + str(report["rain"]) + "mm."
         return "Es ist kein Niederschlag zu erwarten."
+
+    @staticmethod
+    def __kelvin_to_celsius__(kelvin: float):
+        return round(kelvin -273.15, 2)
