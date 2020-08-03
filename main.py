@@ -1,12 +1,13 @@
 from Consumers.ConsoleConsumer import ConsoleConsumer
 from Consumers.ConsumerBase import ConsumerBase
+from Consumers.SpeechConsumer import SpeechConsumer
 from ReportGenerators.WeatherReportGenerator.WeatherReportGenerator import WeatherReportGenerator
 from Triggers.TimeTrigger import TimeTrigger
 from Triggers.TriggerBase import TriggerBase
 
 triggers = [TimeTrigger()]  # type: List[TriggerBase]
 report_generators = [WeatherReportGenerator()]  # type: List[WeatherReportGenerator]
-consumers = [ConsoleConsumer()]  # type: List[ConsumerBase]
+consumers = [ConsoleConsumer(), SpeechConsumer("C:\\Users\\lucas\\Downloads\\twitterreader-1b957530850b.json")]  # type: List[ConsumerBase]
 
 
 def broadcast(message: str) -> None:
@@ -20,7 +21,7 @@ def send():
         reports.append(report_generator.generate_report())
 
     report_text = "\n".join(reports)
-    print(report_text)
+    broadcast(report_text)
 
 
 def startup():
