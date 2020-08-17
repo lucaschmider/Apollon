@@ -1,10 +1,11 @@
 from datetime import datetime, timedelta
+from threading import Thread
 from time import sleep
 
 from Triggers.TriggerBase import TriggerBase
 
 
-class TimeTrigger(TriggerBase):
+class TimeTrigger(TriggerBase, Thread):
     __last_trigger_time__ = None
 
     def run(self) -> None:
