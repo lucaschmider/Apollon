@@ -1,5 +1,6 @@
 from typing import List
-
+from ConsumerHooks.ConsumerHookBase import ConsumerHookBase
+from ConsumerHooks.LedHook import LedHook
 from Consumers.ConsoleConsumer import ConsoleConsumer
 from Consumers.ConsumerBase import ConsumerBase
 from Consumers.SpeechConsumer import SpeechConsumer
@@ -8,18 +9,22 @@ from Triggers.TimeTrigger import TimeTrigger
 from Triggers.TriggerBase import TriggerBase
 from Triggers.ButtonTrigger import ButtonTrigger
 
-
 triggers = [TimeTrigger(), ButtonTrigger(4)]  # type: List[TriggerBase]
 report_generators = [WeatherReportGenerator()]  # type: List[WeatherReportGenerator]
+consumer_hooks = [LedHook()]  # type: List[ConsumerHookBase]
 consumers = [
     ConsoleConsumer(),
-    SpeechConsumer("C:\\Users\\lucas\\Downloads\\twitterreader-1b957530850b.json")
+    SpeechConsumer("../sa.json")
 ]  # type: List[ConsumerBase]
 
 
 def broadcast(message: str) -> None:
+    for consumer_hook in consumer_hooks:
+        consumer_hook.before_consumers_started()
     for consumer in consumers:
         consumer.consume(message)
+    for consumer_hook in consumer_hooks:
+        consumer_hook.after_consumers_finished()
 
 
 def send():
