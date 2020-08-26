@@ -1,21 +1,25 @@
 import time
+from typing import List, Tuple
+
 import board
-import neopixel
+from neopixel import NeoPixel
 from ApplicationHooks.ApplicationHookBase import ApplicationHookBase
 
 
 class LedHook(ApplicationHookBase):
-    __DEFAULT_FRAME__ = [2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 0, 0]
-    __SPEECH_FRAMES__ = [
-        [1, 2, 2, 2, 1, 2, 1, 2, 1, 2, 1, 2, 2, 2, 1, 2, 2, 2, 3, 3],
-        [2, 2, 2, 1, 2, 2, 2, 1, 2, 1, 2, 1, 2, 1, 2, 2, 2, 1, 3, 3],
-        [2, 2, 1, 2, 2, 2, 1, 2, 1, 2, 1, 2, 1, 2, 2, 2, 1, 2, 3, 3],
-        [2, 1, 2, 2, 2, 1, 2, 1, 2, 1, 2, 1, 2, 2, 2, 1, 2, 2, 3, 3]
-    ]
-    __COLOR_THEME__ = [(0, 0, 0), (0, 0, 255), (0, 162, 20), (255, 0, 0)]
+    __DEFAULT_FRAME__: List[int] = None
+    __SPEECH_FRAMES__: List[List[int]] = None
+    __COLOR_THEME__: List[Tuple[int, int, int]] = None
     __FRAME_DURATION__ = 0.1
-    __pixels__ = neopixel.NeoPixel(board.D18, 20)
+    __pixels__: NeoPixel = None
     __animation_running__ = False
+
+    def __init__(self, configuration):
+        super().__init__()
+        self.__DEFAULT_FRAME__ = configuration["FRAMES"]["DEFAULT"]
+        self.__SPEECH_FRAMES__ = configuration["FRAMES"]["SPEECH"]
+        self.__COLOR_THEME__ = configuration["THEME"]
+        self.__pixels__ = NeoPixel(board.D18, configuration["LED_COUNT"])
 
     def before_consumers_started(self) -> None:
         self.__animation_running__ = True
