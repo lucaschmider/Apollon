@@ -19,6 +19,8 @@ class SpeechConsumer(ConsumerBase):
         self.synthesize_text(message, "output.wav")
         pygame.mixer.music.load("output.wav")
         pygame.mixer.music.play()
+        while pygame.mixer.music.get_busy():
+                pass
 
     def synthesize_text(self, text: str, output_location: str) -> None:
         """Synthesizes speech from the input string of text."""
