@@ -19,11 +19,6 @@ class LedHook(ConsumerHookBase):
 
     def before_consumers_started(self) -> None:
         self.__animation_running__ = True
-        while self.__animation_running__:
-            for frame in self.__SPEECH_FRAMES__:
-                for led_index in range(len(frame)):
-                    self.__pixels__[led_index] = self.__COLOR_THEME__[frame[led_index]]
-                time.sleep(self.__FRAME_DURATION__)
 
     def after_consumers_finished(self) -> None:
         self.__animation_running__ = False
@@ -33,3 +28,11 @@ class LedHook(ConsumerHookBase):
     def __restore_default_frame__(self):
         for led_index in range(len(self.__DEFAULT_FRAME__)):
             self.__pixels__[led_index] = self.__COLOR_THEME__[self.__DEFAULT_FRAME__[led_index]]
+
+    def run(self) -> None:
+        while True:
+            if self.__animation_running__:
+                for frame in self.__SPEECH_FRAMES__:
+                    for led_index in range(len(frame)):
+                        self.__pixels__[led_index] = self.__COLOR_THEME__[frame[led_index]]
+                    time.sleep(self.__FRAME_DURATION__)
