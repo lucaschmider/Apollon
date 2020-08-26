@@ -1,7 +1,6 @@
-import time
+from time import sleep
 from typing import List, Tuple
-
-import board
+from board import D18
 from neopixel import NeoPixel
 from ApplicationHooks.ApplicationHookBase import ApplicationHookBase
 
@@ -19,14 +18,14 @@ class LedHook(ApplicationHookBase):
         self.__DEFAULT_FRAME__ = configuration["FRAMES"]["DEFAULT"]
         self.__SPEECH_FRAMES__ = configuration["FRAMES"]["SPEECH"]
         self.__COLOR_THEME__ = configuration["THEME"]
-        self.__pixels__ = NeoPixel(board.D18, configuration["LED_COUNT"])
+        self.__pixels__ = NeoPixel(D18, configuration["LED_COUNT"])
 
     def before_consumers_started(self) -> None:
         self.__animation_running__ = True
 
     def after_consumers_finished(self) -> None:
         self.__animation_running__ = False
-        time.sleep(5 * self.__FRAME_DURATION__)
+        sleep(5 * self.__FRAME_DURATION__)
         self.__restore_default_frame__()
 
     def application_ready(self) -> None:
@@ -42,4 +41,4 @@ class LedHook(ApplicationHookBase):
                 for frame in self.__SPEECH_FRAMES__:
                     for led_index in range(len(frame)):
                         self.__pixels__[led_index] = self.__COLOR_THEME__[frame[led_index]]
-                    time.sleep(self.__FRAME_DURATION__)
+                    sleep(self.__FRAME_DURATION__)

@@ -4,7 +4,7 @@ from Exceptions.CallbackNotInitializedException import CallbackNotInitializedExc
 
 
 class TriggerBase(Thread):
-    __callback__ = None  # type: Callable[[], None]
+    __callback__: Callable[[], None] = None
 
     def register_callback(self, callback: Callable[[None], None]):
         self.__callback__ = callback

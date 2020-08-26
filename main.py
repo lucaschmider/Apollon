@@ -10,16 +10,16 @@ from Triggers.TriggerBase import TriggerBase
 from Triggers.ButtonTrigger import ButtonTrigger
 from Configuration import CONFIGURATION
 
-triggers = [
+triggers: List[TriggerBase] = [
     TimeTrigger(CONFIGURATION["TRIGGERS"]["DAILY_TRIGGER_TIME"]),
     ButtonTrigger(CONFIGURATION["TRIGGERS"]["BUTTON_TRIGGER_PIN"])
-]  # type: List[TriggerBase]
-report_generators = [WeatherReportGenerator()]  # type: List[WeatherReportGenerator]
+]
+report_generators: List[WeatherReportGenerator] = [WeatherReportGenerator()]
 consumer_hooks = [LedHook(CONFIGURATION["APPLICATION_HOOKS"]["LED"])]  # type: List[ApplicationHookBase]
-consumers = [
+consumers: List[ConsumerBase] = [
     ConsoleConsumer(),
     SpeechConsumer(CONFIGURATION["CONSUMERS"]["SPEECH_CONSUMER"]["SERVICE_ACCOUNT_FILE"])
-]  # type: List[ConsumerBase]
+]
 
 
 def broadcast(message: str) -> None:
