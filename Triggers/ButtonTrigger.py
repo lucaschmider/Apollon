@@ -3,8 +3,8 @@ from gpiozero import Button
 
 
 class ButtonTrigger(TriggerBase):
-    __pin_number__ = 0  # type: int
-    __trigger_button__ = None  # type: Button
+    __pin_number__: int = 0
+    __trigger_button__: Button = None
 
     def __init__(self, pin: int):
         super().__init__()

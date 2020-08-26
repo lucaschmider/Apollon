@@ -8,14 +8,18 @@ from ReportGenerators.WeatherReportGenerator.WeatherReportGenerator import Weath
 from Triggers.TimeTrigger import TimeTrigger
 from Triggers.TriggerBase import TriggerBase
 from Triggers.ButtonTrigger import ButtonTrigger
+from Configuration import CONFIGURATION
 
-triggers = [TimeTrigger(), ButtonTrigger(4)]  # type: List[TriggerBase]
-report_generators = [WeatherReportGenerator()]  # type: List[WeatherReportGenerator]
-consumer_hooks = [LedHook()]  # type: List[ApplicationHookBase]
-consumers = [
+triggers: List[TriggerBase] = [
+    TimeTrigger(CONFIGURATION["TRIGGERS"]["DAILY_TRIGGER_TIME"]),
+    ButtonTrigger(CONFIGURATION["TRIGGERS"]["BUTTON_TRIGGER_PIN"])
+]
+report_generators: List[WeatherReportGenerator] = [WeatherReportGenerator()]
+consumer_hooks = [LedHook(CONFIGURATION["APPLICATION_HOOKS"]["LED"])]  # type: List[ApplicationHookBase]
+consumers: List[ConsumerBase] = [
     ConsoleConsumer(),
-    SpeechConsumer("../sa.json")
-]  # type: List[ConsumerBase]
+    SpeechConsumer(CONFIGURATION["CONSUMERS"]["SPEECH_CONSUMER"]["SERVICE_ACCOUNT_FILE"])
+]
 
 
 def broadcast(message: str) -> None:
