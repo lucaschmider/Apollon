@@ -1,9 +1,7 @@
-import time
-
+from pygame import mixer
 from Consumers.ConsumerBase import ConsumerBase
 from google.cloud import texttospeech
 from google.oauth2 import service_account
-import playsound
 
 
 class SpeechConsumer(ConsumerBase):
@@ -13,10 +11,14 @@ class SpeechConsumer(ConsumerBase):
         credentials = service_account.Credentials.from_service_account_file(
             service_account__file)
         self.__client__ = texttospeech.TextToSpeechClient(credentials=credentials)
+        mixer.init()
 
     def consume(self, message: str) -> None:
-        self.synthesize_text(message, "output.mp3")
-        playsound.playsound("output.mp3")
+        self.synthesize_text(message, "output.wav")
+        mixer.music.load("output.wav")
+        mixer.music.play()
+        while mixer.music.get_busy():
+            pass
 
     def synthesize_text(self, text: str, output_location: str) -> None:
         """Synthesizes speech from the input string of text."""
@@ -28,7 +30,7 @@ class SpeechConsumer(ConsumerBase):
             ssml_gender=texttospeech.SsmlVoiceGender.FEMALE,
         )
         audio_config = texttospeech.AudioConfig(
-            audio_encoding=texttospeech.AudioEncoding.MP3
+            audio_encoding=texttospeech.AudioEncoding.LINEAR16
         )
         response = self.__client__.synthesize_speech(
             request={"input": input_text, "voice": voice, "audio_config": audio_config}
@@ -36,4 +38,4 @@ class SpeechConsumer(ConsumerBase):
 
         with open(output_location, "wb") as out:
             out.write(response.audio_content)
-            print('Audio content written to file "output.mp3"')
+            print('Audio content written to file "output.wav"')
