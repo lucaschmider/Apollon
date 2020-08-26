@@ -4,6 +4,7 @@ from ApplicationHooks.LedHook import LedHook
 from Consumers.ConsoleConsumer import ConsoleConsumer
 from Consumers.ConsumerBase import ConsumerBase
 from Consumers.SpeechConsumer import SpeechConsumer
+from ReportGenerators.CovidReportGenerator import CovidReportGenerator
 from ReportGenerators.WeatherReportGenerator import WeatherReportGenerator
 from Triggers.TimeTrigger import TimeTrigger
 from Triggers.TriggerBase import TriggerBase
@@ -14,8 +15,8 @@ triggers: List[TriggerBase] = [
     TimeTrigger(CONFIGURATION["TRIGGERS"]["DAILY_TRIGGER_TIME"]),
     ButtonTrigger(CONFIGURATION["TRIGGERS"]["BUTTON_TRIGGER_PIN"])
 ]
-report_generators: List[WeatherReportGenerator] = [WeatherReportGenerator()]
-consumer_hooks = [LedHook(CONFIGURATION["APPLICATION_HOOKS"]["LED"])]  # type: List[ApplicationHookBase]
+report_generators: List[WeatherReportGenerator] = [WeatherReportGenerator(), CovidReportGenerator()]
+consumer_hooks: List[ApplicationHookBase] = [LedHook(CONFIGURATION["APPLICATION_HOOKS"]["LED"])]
 consumers: List[ConsumerBase] = [
     ConsoleConsumer(),
     SpeechConsumer(CONFIGURATION["CONSUMERS"]["SPEECH_CONSUMER"]["SERVICE_ACCOUNT_FILE"])
