@@ -4,7 +4,7 @@ from ApplicationHooks.LedHook import LedHook
 from Consumers.ConsoleConsumer import ConsoleConsumer
 from Consumers.ConsumerBase import ConsumerBase
 from Consumers.SpeechConsumer import SpeechConsumer
-from ReportGenerators.WeatherReportGenerator.WeatherReportGenerator import WeatherReportGenerator
+from ReportGenerators.WeatherReportGenerator import WeatherReportGenerator
 from Triggers.TimeTrigger import TimeTrigger
 from Triggers.TriggerBase import TriggerBase
 from Triggers.ButtonTrigger import ButtonTrigger
