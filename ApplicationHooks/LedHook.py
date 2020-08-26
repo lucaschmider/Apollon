@@ -1,10 +1,10 @@
 import time
 import board
 import neopixel
-from ConsumerHooks.ConsumerHookBase import ConsumerHookBase
+from ApplicationHooks.ApplicationHookBase import ApplicationHookBase
 
 
-class LedHook(ConsumerHookBase):
+class LedHook(ApplicationHookBase):
     __DEFAULT_FRAME__ = [2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 0, 0]
     __SPEECH_FRAMES__ = [
         [1, 2, 2, 2, 1, 2, 1, 2, 1, 2, 1, 2, 2, 2, 1, 2, 2, 2, 3, 3],
@@ -23,6 +23,9 @@ class LedHook(ConsumerHookBase):
     def after_consumers_finished(self) -> None:
         self.__animation_running__ = False
         time.sleep(5 * self.__FRAME_DURATION__)
+        self.__restore_default_frame__()
+
+    def application_ready(self) -> None:
         self.__restore_default_frame__()
 
     def __restore_default_frame__(self):

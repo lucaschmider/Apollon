@@ -1,6 +1,6 @@
 from typing import List
-from ConsumerHooks.ConsumerHookBase import ConsumerHookBase
-from ConsumerHooks.LedHook import LedHook
+from ApplicationHooks.ApplicationHookBase import ApplicationHookBase
+from ApplicationHooks.LedHook import LedHook
 from Consumers.ConsoleConsumer import ConsoleConsumer
 from Consumers.ConsumerBase import ConsumerBase
 from Consumers.SpeechConsumer import SpeechConsumer
@@ -11,7 +11,7 @@ from Triggers.ButtonTrigger import ButtonTrigger
 
 triggers = [TimeTrigger(), ButtonTrigger(4)]  # type: List[TriggerBase]
 report_generators = [WeatherReportGenerator()]  # type: List[WeatherReportGenerator]
-consumer_hooks = [LedHook()]  # type: List[ConsumerHookBase]
+consumer_hooks = [LedHook()]  # type: List[ApplicationHookBase]
 consumers = [
     ConsoleConsumer(),
     SpeechConsumer("../sa.json")
@@ -40,6 +40,8 @@ def startup():
     for trigger in triggers:
         trigger.register_callback(send)
         trigger.start()
+    for consumer_hook in consumer_hooks:
+        consumer_hook.application_ready()
 
 
 startup()

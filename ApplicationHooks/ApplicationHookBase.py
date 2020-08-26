@@ -1,7 +1,7 @@
 from threading import Thread
 
 
-class ConsumerHookBase(Thread):
+class ApplicationHookBase(Thread):
     def __init__(self):
         super().__init__()
         self.start()
@@ -10,4 +10,7 @@ class ConsumerHookBase(Thread):
         pass
 
     def after_consumers_finished(self):
+        pass
+
+    def application_ready(self):
         pass
