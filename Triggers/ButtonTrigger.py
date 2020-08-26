@@ -7,6 +7,7 @@ class ButtonTrigger(TriggerBase):
     __trigger_button__ = None  # type: Button
 
     def __init__(self, pin: int):
+        super().__init__()
         self.__pin_number__ = pin
 
     def run(self):

@@ -5,7 +5,7 @@ from time import sleep
 from Triggers.TriggerBase import TriggerBase
 
 
-class TimeTrigger(TriggerBase, Thread):
+class TimeTrigger(TriggerBase):
     __last_trigger_time__ = None
 
     def run(self) -> None:
