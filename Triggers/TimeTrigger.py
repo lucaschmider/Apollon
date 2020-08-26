@@ -15,8 +15,8 @@ class TimeTrigger(TriggerBase):
     def run(self) -> None:
         while True:
             now = datetime.now()
-            if now.minute is self.__configured_trigger_time__[0] and \
-               now.hour is self.__configured_trigger_time__[1] and \
-               now.second is 0:
+            if now.hour == self.__configured_trigger_time__[0] and \
+               now.minute == self.__configured_trigger_time__[1] and \
+               now.second == 0:
                 self.trigger()
-            sleep(1)
+                sleep(1)
