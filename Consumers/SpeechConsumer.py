@@ -1,8 +1,7 @@
-import pygame
+from pygame import mixer
 from Consumers.ConsumerBase import ConsumerBase
 from google.cloud import texttospeech
 from google.oauth2 import service_account
-import playsound
 
 
 class SpeechConsumer(ConsumerBase):
@@ -12,15 +11,14 @@ class SpeechConsumer(ConsumerBase):
         credentials = service_account.Credentials.from_service_account_file(
             service_account__file)
         self.__client__ = texttospeech.TextToSpeechClient(credentials=credentials)
-        pygame.mixer.init()
-        pygame.init()
+        mixer.init()
 
     def consume(self, message: str) -> None:
         self.synthesize_text(message, "output.wav")
-        pygame.mixer.music.load("output.wav")
-        pygame.mixer.music.play()
-        while pygame.mixer.music.get_busy():
-                pass
+        mixer.music.load("output.wav")
+        mixer.music.play()
+        while mixer.music.get_busy():
+            pass
 
     def synthesize_text(self, text: str, output_location: str) -> None:
         """Synthesizes speech from the input string of text."""
