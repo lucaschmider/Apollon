@@ -14,3 +14,6 @@ class ApplicationHookBase(Thread):
 
     def application_ready(self):
         pass
+
+    def report_generation_started(self):
+        pass
