@@ -25,6 +25,11 @@ consumers: List[ConsumerBase] = [
 
 def broadcast(message: str) -> None:
     for consumer_hook in consumer_hooks:
+        consumer_hook.report_generation_started()
+    for consumer in consumers:
+        consumer.prepare_consumption(message)
+        
+    for consumer_hook in consumer_hooks:
         consumer_hook.before_consumers_started()
     for consumer in consumers:
         consumer.consume(message)
