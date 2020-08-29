@@ -20,8 +20,10 @@ class SpeechConsumer(ConsumerBase):
         self.__client__ = TextToSpeechClient(credentials=credentials)
         mixer.init()
 
-    def consume(self, message: str) -> None:
+    def prepare_consumption(self, message: str) -> None:
         self.synthesize_text(message, self.__TEMPORARY_FILE__)
+
+    def consume(self, message: str) -> None:
         mixer.music.load(self.__TEMPORARY_FILE__)
         mixer.music.play()
         while mixer.music.get_busy():

@@ -6,9 +6,16 @@ import requests
 
 
 class WeatherReportGenerator(ReportGeneratorBase):
+    __ZIP__: str = None
+    __COUNTRY_CODE__: str = None
+
+    def __init__(self, configuration: Dict[str, str]):
+        self.__ZIP__ = configuration["ZIP"]
+        self.__COUNTRY_CODE__ = configuration["COUNTRY_CODE"]
+
     def generate_report(self) -> str:
-        response = requests.get(
-            "https://api.openweathermap.org/data/2.5/forecast/daily?appid=b2d64a2fbedaa12f1f48ebd117b31e74&zip=77761,de&cnt=2")
+        response = requests.get("https://api.openweathermap.org/data/2.5/forecast/daily?appid=b2d64a2fbedaa12f1f48ebd117b31e74&zip={}},{}&cnt=2")
+            format(self.__ZIP__, self.__COUNTRY_CODE__)
         if response.status_code != 200:
             print(response.status_code)
 

@@ -15,7 +15,10 @@ triggers: List[TriggerBase] = [
     TimeTrigger(CONFIGURATION["TRIGGERS"]["DAILY_TRIGGER_TIME"]),
     ButtonTrigger(CONFIGURATION["TRIGGERS"]["BUTTON_TRIGGER_PIN"])
 ]
-report_generators: List[WeatherReportGenerator] = [WeatherReportGenerator(), CovidReportGenerator()]
+report_generators: List[WeatherReportGenerator] = [
+    WeatherReportGenerator(CONFIGURATION["REPORT_GENERATORS"]["WEATHER"]),
+    CovidReportGenerator()
+]
 consumer_hooks: List[ApplicationHookBase] = [LedHook(CONFIGURATION["APPLICATION_HOOKS"]["LED"])]
 consumers: List[ConsumerBase] = [
     ConsoleConsumer(),
@@ -24,6 +27,11 @@ consumers: List[ConsumerBase] = [
 
 
 def broadcast(message: str) -> None:
+    for consumer_hook in consumer_hooks:
+        consumer_hook.report_generation_started()
+    for consumer in consumers:
+        consumer.prepare_consumption(message)
+        
     for consumer_hook in consumer_hooks:
         consumer_hook.before_consumers_started()
     for consumer in consumers:
