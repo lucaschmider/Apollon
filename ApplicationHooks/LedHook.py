@@ -32,7 +32,8 @@ class LedHook(ApplicationHookBase):
         
     def run(self) -> None:
         while True:
-            for frame in self.__ANIMATIONS__[self.__current_animation__]:
-                for led_index in range(len(frame)):
-                    self.__pixels__[led_index] = self.__COLOR_THEME__[frame[led_index]]
-                sleep(self.__FRAME_DURATION__)
+            if self.__ANIMATIONS__ is not None:
+                for frame in self.__ANIMATIONS__[self.__current_animation__]:
+                    for led_index in range(len(frame)):
+                        self.__pixels__[led_index] = self.__COLOR_THEME__[frame[led_index]]
+                    sleep(self.__FRAME_DURATION__)
