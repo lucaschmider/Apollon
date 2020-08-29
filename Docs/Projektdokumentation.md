@@ -44,7 +44,7 @@ Die Klasse ruft diese API auf, speichert die Werte zwischen und gibt die aktuell
 
 ## Consumers
 
-Nachdem der Bericht fertiggestellt wurde, werden gilt es, die Informationen zu verbreiten. Diese Aufgabe wird von Klassen übernommen, welche von der `ConsumerBase`-Klasse erben. Auch diese Basisklasse arbeitet als Interface und deklariert lediglich die Methode `consume(message: string)`. Auch Consumer arbeiten synchron, um zu verhindern, dass sich Ausgaben überschneiden.
+Nachdem der Bericht fertiggestellt wurde, werden gilt es, die Informationen zu verbreiten. Diese Aufgabe wird von Klassen übernommen, welche von der `ConsumerBase`-Klasse erben. Auch diese Basisklasse arbeitet als Interface und deklariert die Methode `consume(message: string)`. Auch Consumer arbeiten synchron, um zu verhindern, dass sich Ausgaben überschneiden. Da der `SpeechConsumer` größere Datenmengen über das Netzwerk überträgt, was manchmal zu einem stark asynchronen Einsetzen von Sprache und passender Animation führt, wurde die Methode `prepare_consumption(message: string)` eingeführt. Auf diese Weise kann die Animation erst zu einem späteren Zeitpunkt gestartet werden.
 
 ### ConsoleConsumer
 
@@ -67,23 +67,35 @@ Die Lichteffekte der Zähne und der Augen werden über ApplicationHooks realisie
 
 ```python
 {
-    {
-        "LED_COUNT": 20,
-        "THEME": [(0, 0, 0), (0, 0, 255), (0, 162, 20), (255, 0, 0)],
-        "FRAMES": {
-            "SPEECH": [
-                [1, 2, 2, 2, 1, 2, 1, 2, 1, 2, 1, 2, 2, 2, 1, 2, 2, 2, 3, 3],
-                [2, 2, 2, 1, 2, 2, 2, 1, 2, 1, 2, 1, 2, 1, 2, 2, 2, 1, 3, 3],
-                [2, 2, 1, 2, 2, 2, 1, 2, 1, 2, 1, 2, 1, 2, 2, 2, 1, 2, 3, 3],
-                [2, 1, 2, 2, 2, 1, 2, 1, 2, 1, 2, 1, 2, 2, 2, 1, 2, 2, 3, 3]
-            ],
-            "DEFAULT": [2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 0, 0]
-        }
+    "LED_COUNT": 20,
+    "THEME": [(0, 0, 0), (0, 0, 255), (0, 162, 20), (255, 0, 0)],
+    "ANIMATIONS": {
+        "SPEECH": [
+            [1, 2, 2, 2, 1, 2, 1, 2, 1, 2, 1, 2, 2, 2, 1, 2, 2, 2, 3, 3],
+            [2, 2, 2, 1, 2, 2, 2, 1, 2, 1, 2, 1, 2, 1, 2, 2, 2, 1, 3, 3],
+            [2, 2, 1, 2, 2, 2, 1, 2, 1, 2, 1, 2, 1, 2, 2, 2, 1, 2, 3, 3],
+            [2, 1, 2, 2, 2, 1, 2, 1, 2, 1, 2, 1, 2, 2, 2, 1, 2, 2, 3, 3]
+        ],
+        "DEFAULT": [[2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 0, 0]],
+        "GENERATING":[
+            [2 ,2 ,2 ,2 ,2 ,2 ,0 ,0 ,0 ,0 ,0 ,1 ,2 ,2 ,2 ,2 ,2 ,2, 2],
+            [2 ,2 ,2 ,2 ,2 ,2 ,0 ,0 ,0 ,0 ,1 ,0 ,2 ,2 ,2 ,2 ,2 ,2, 2],
+            [2 ,2 ,2 ,2 ,2 ,2 ,0 ,0 ,0 ,1 ,0 ,0 ,2 ,2 ,2 ,2 ,2 ,2, 2],
+            [2 ,2 ,2 ,2 ,2 ,2 ,0 ,0 ,1 ,0 ,0 ,0 ,2 ,2 ,2 ,2 ,2 ,2, 2],
+            [2 ,2 ,2 ,2 ,2 ,2 ,0 ,1 ,0 ,0 ,0 ,0 ,2 ,2 ,2 ,2 ,2 ,2, 2],
+            [2 ,2 ,2 ,2 ,2 ,2 ,1 ,0 ,0 ,0 ,0 ,0 ,2 ,2 ,2 ,2 ,2 ,2, 2]
+        ]
     }
 }
 ```
 
-Wie zu sehen ist, muss für den Fall, dass eine andere LED-Leiste mit einer höheren LED Dichte verwendet wird die Anzahl der Pixel angegeben werden. Unter dem Schlüssel `THEME` können RGB Farben als Dreiertupel angegeben werden, deren Index mit deren Index die Farben später verwendet werden können. Unter `FRAMES` kann die Animation während der Consumerphase (`SPEECH`) in einem zweidimensionalen Array angegeben werden. Die erste Dimension repräsentiert dabei ein Bild und eine Ziffer in der zweiten Dimension repräsentiert eine Farbe, die im Farbschema angegeben wurde. Es ist möglich, weitere Bilder der Animation hinzuzufügen. Das Bild, das in allen anderen Situationen gezeigt wird, kann unter `DEFAULT` angegeben werden.
+Wie zu sehen ist, muss für den Fall, dass eine andere LED-Leiste mit einer höheren LED Dichte verwendet wird die Anzahl der Pixel angegeben werden. Unter dem Schlüssel `THEME` können RGB Farben als Dreiertupel angegeben werden, deren Index mit deren Index die Farben später verwendet werden können. Unter `ANIMATIONS` können die Animationen angegeben werden, die bei bestimmten Ereignissen abgespielt werden. Es existieren die Schlüssel
+
+* `GENERATING` - Während die Consumer sich auf den neuen Bericht einstellen
+* `SPEECH` - Während die Consumer die Methode `` bearbeiten
+* `DEFAULT` - Zu allen verbleibenden Zeitpunkten
+
+Die Animationen werden als zweidimensionale Liste von ganzzahlen gespeichert. Die erste Dimension steht für den Frame, die zweite für die Position des Pixels in der Leiste. Die Zahl repräsentiert eine Farbe, wie sie in der `Theme` Eigenschaft angegeben wurde.
 
 ## Elektronik
 
