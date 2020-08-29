@@ -3,6 +3,12 @@ CONFIGURATION = {
         "DAILY_TRIGGER_TIME": (17, 30),
         "BUTTON_TRIGGER_PIN": 17
     },
+    "REPORT_GENERATORS": {
+        "WEATHER": { 
+            "ZIP": "77761",
+            "COUNTRY_CODE": "de"
+        }
+    }
     "CONSUMERS": {
         "SPEECH_CONSUMER": {"SERVICE_ACCOUNT_FILE": "../sa.json"}
     },

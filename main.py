@@ -15,7 +15,10 @@ triggers: List[TriggerBase] = [
     TimeTrigger(CONFIGURATION["TRIGGERS"]["DAILY_TRIGGER_TIME"]),
     ButtonTrigger(CONFIGURATION["TRIGGERS"]["BUTTON_TRIGGER_PIN"])
 ]
-report_generators: List[WeatherReportGenerator] = [WeatherReportGenerator(), CovidReportGenerator()]
+report_generators: List[WeatherReportGenerator] = [
+    WeatherReportGenerator(CONFIGURATION["REPORT_GENERATORS"]["WEATHER"]),
+    CovidReportGenerator()
+]
 consumer_hooks: List[ApplicationHookBase] = [LedHook(CONFIGURATION["APPLICATION_HOOKS"]["LED"])]
 consumers: List[ConsumerBase] = [
     ConsoleConsumer(),
