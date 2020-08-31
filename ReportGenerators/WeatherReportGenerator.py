@@ -16,7 +16,7 @@ class WeatherReportGenerator(ReportGeneratorBase):
         self.__API_KEY__ = configuration["API_KEY"]
 
     def generate_report(self) -> str:
-        response = requests.get("https://api.openweathermap.org/data/2.5/forecast/daily?appid={}&zip={}},{}&cnt=2".format(self.__API_KEY__, self.__ZIP__, self.__COUNTRY_CODE__))
+        response = requests.get("https://api.openweathermap.org/data/2.5/forecast/daily?appid={}&zip={},{}&cnt=2".format(self.__API_KEY__, self.__ZIP__, self.__COUNTRY_CODE__))
         if response.status_code != 200:
             print(response.status_code)
 
