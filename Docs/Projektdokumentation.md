@@ -110,3 +110,10 @@ Das ursprüngliche Modell hatte den Zweck als eine Art _Siri-Pendant_ zu agieren
 Ferner war es im ursprünglichen Modell vorgesehen, die Stromversorgung des Raspberry Pi über einen Akku zu puffern. An der Stelle, an der der Akku montiert war, befindet sich nun die selbstgeätzte Platine, weshalb der Haltemechanismus angepasst werden musste.  
 Nach der Fertigstellung des Modells wurde ein Ultimaker 2+ bemüht, die Einzelteile des Gehäuses über einige Tage hinweg zu drucken. Daraufhin wurden einige Teile mittels Sprühlack lackiert, um Kontraste zu schaffen ohne die Produktionszeit durch Filamentwechsel weiter zu erhöhen.
 ![Explosionsgrafik des modifizierten Modells](BenderExplosion.png)
+
+## Ausblick
+
+In einer weiteren Version des Systems sollte die Speicherung der Anwendungsgeheimnisse überdacht werden. Für solche Zwecke gibt es Cloudlösungen wie Azure Key Vault. Eine weitere Möglichkeit wäre es, aus der Anwendung einen Docker Container zu bauen und hier die Einschlägigen Lösungen zu verwenden.  
+Die Consumer könnten außerdem umgebaut werden, um Promises einzusetzen. Auf diese Weise würden nicht unnötig viele Threads verwendet werden. Der `SpeechConsumer` läuft zum Beispiel nur deshalb in einem eigenen Thread, damit in einer Schleife geprüft werden kann, ob die Audiodatei bereits vollständig abgespielt ist. In einer Lösung mit Promises könnte die Callback-Funktion an `Pygame` weitergereicht werden und so auf zusätzliche Threads für Consumer abgesehen werden. Langlaufende Prozesse könnten jedoch weiterhin auf die Methode setzen, falls die Implementierung nicht ohnehin schon einen eigenen Thread startet.  
+Eine Überarbeitung hat vor allem die Hardware nötig. Das Modell des Gehäuses enthält keine Montagevorrichtung für die Augenpartie, im Moment wurden hier nachträglich Kernlöcher für zwei Gewinde gebohrt.  
+Im inneren sind außerdem noch freie Kabel, die von dem verbauten Lautsprecher zu einer externen Soundkarte abgehen. Es wäre möglich, diese Elektronik auf der entworfenen Platine unterzubringen, um weniger _Kabelsalat_ im Gehäuse zu beherbergen.
